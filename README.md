@@ -542,16 +542,6 @@ Has not been validated against clinical assessments (PHQ-9, GAD-7). **Future wor
 
 5. **Lugaresi, C., et al. (2019).** *MediaPipe: A Framework for Building Perception Pipelines.* arXiv preprint arXiv:1906.08172. — MediaPipe framework
 
----
-
-## Author
-
-**[Your Name]** — BCA Student, Applied AI & Affective Computing
-
-**Project Context:** This system was developed as a prototype exploring real-time dimensional emotion modeling and mental state assessment. The implementation extends research on valence-arousal affect models by adding distress computation, temporal tracking, and risk assessment layers.
-
----
-
 ## License
 
 MIT License. See `LICENSE` for details.
