@@ -9,6 +9,9 @@
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
 > A real-time multimodal affective computing system that detects emotional distress from **facial expressions and voice prosody** using dimensional emotion modeling, temporal tracking, and behavioral analysis.
+>
+> <img width="1917" height="984" alt="image" src="https://github.com/user-attachments/assets/ccc9447d-7e41-4a67-82e8-7631169907df" />
+
 
 ---
 
