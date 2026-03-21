@@ -6,7 +6,6 @@ class FeatureFusion:
     def __init__(self):
         pass
 
-
     def fuse(
         self,
         face_valence,
@@ -14,7 +13,8 @@ class FeatureFusion:
         face_distress,
         behavior_features,
         voice_emotion=None,
-        voice_features=None
+        voice_features=None,
+        temporal_stats=None
     ):
 
         # ----------------------
@@ -25,22 +25,26 @@ class FeatureFusion:
         mouth_open = behavior_features.get("mouth_openness", 0.0)
 
         # ----------------------
-        # Face features
+        # Face + behavior vector
         # ----------------------
 
         features = [
-            face_valence,
-            face_arousal,
-            face_distress,
-            eye_open,
-            mouth_open
+            face_valence,   # Vf
+            face_arousal,   # Af
+            face_distress,  # Df
+            eye_open,       # EAR
+            mouth_open      # MAR
         ]
 
         # ----------------------
-        # Voice features (optional)
+        # Voice features
         # ----------------------
 
-        if voice_emotion and voice_features:
+        if voice_emotion is None or voice_features is None:
+
+            voice_vector = [0.0] * 7
+
+        else:
 
             v_valence = voice_emotion.get("valence", 0.0)
             v_arousal = voice_emotion.get("arousal", 0.0)
@@ -61,6 +65,25 @@ class FeatureFusion:
                 energy
             ]
 
-            features.extend(voice_vector)
+        # ----------------------
+        # Temporal features
+        # ----------------------
+
+        if temporal_stats:
+            temporal_vector = [
+                temporal_stats.get("valence_var", 0.0),
+                temporal_stats.get("distress_var", 0.0),
+                temporal_stats.get("high_distress_ratio", 0.0),
+                temporal_stats.get("positive_valence_ratio", 0.0)
+            ]
+        else:
+            temporal_vector = [0.0] * 4
+
+        # ----------------------
+        # Final fusion vector
+        # ----------------------
+
+        features.extend(voice_vector)
+        features.extend(temporal_vector)
 
         return np.array(features, dtype=float)

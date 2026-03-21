@@ -19,6 +19,7 @@ class EmotionClassifier:
         ]
 
     def predict_emotion(self, face):
+        from deepface import DeepFace
 
         if face.size == 0:
             return None

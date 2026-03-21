@@ -9,7 +9,6 @@ class MentalStateClassifier:
         # [Vf, Af, Df, eye, mouth, Vv, Av, Dv, pitch, jitter, shimmer, energy]
 
         self.w = np.array([
-
             -1.2,   # face valence
              0.8,   # face arousal
              1.5,   # face distress
@@ -27,7 +26,6 @@ class MentalStateClassifier:
              0.01   # energy
         ])
 
-        # bias
         self.b = 0.1
 
 
@@ -36,8 +34,28 @@ class MentalStateClassifier:
     # --------------------------
 
     def sigmoid(self, x):
-
         return 1 / (1 + np.exp(-x))
+
+
+    # --------------------------
+    # Feature normalization
+    # --------------------------
+
+    def normalize(self, x):
+
+        x = np.array(x, dtype=float)
+
+        # Manual scaling to keep features comparable
+        x[8] = x[8] / 300.0   # pitch normalization
+        x[11] = x[11] / 1000.0  # energy normalization
+
+        # L2 normalization
+        norm = np.linalg.norm(x)
+
+        if norm != 0:
+            x = x / norm
+
+        return x
 
 
     # --------------------------
@@ -46,14 +64,16 @@ class MentalStateClassifier:
 
     def predict_probability(self, feature_vector):
 
-        feature_vector = np.array(feature_vector)
+        feature_vector = np.array(feature_vector, dtype=float)
 
-        # safety check
         if feature_vector.shape[0] != self.w.shape[0]:
             raise ValueError(
                 f"Feature vector size {feature_vector.shape[0]} "
                 f"does not match weight size {self.w.shape[0]}"
             )
+
+        # normalize features
+        feature_vector = self.normalize(feature_vector)
 
         z = np.dot(self.w, feature_vector) + self.b
 
